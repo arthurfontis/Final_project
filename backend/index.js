@@ -6,6 +6,7 @@ app.db = db
 
 consign()
     .then('./config/middlewares.js')
+    .then('./api/validation.js')
     .then('./api')
     .then('./config/routes.js')
     .into(app)
@@ -13,4 +14,5 @@ consign()
 app.listen(3000, () =>{
     console.log('Backend executando...')
 })
+
 
