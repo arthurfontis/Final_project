@@ -2,7 +2,11 @@ module.exports = app => {
     const { existsOrError, notExistsOrError } = app.api.validation
 
     const save = (req, res) => {
-        const category = { ...req.body }
+        const category = {
+            id: req.body.id,
+            name: req.body.name,
+            parentId: req.body.parentId
+        }
         if (req.params.id) category.id = req.params.id
 
 
@@ -44,7 +48,7 @@ module.exports = app => {
             existsOrError(rowsDeleted, 'Categoria não foi encontrada.')
 
             res.status(204).send()
-        } catch(msg) {
+        } catch (msg) {
             res.status(400).send(msg)
         }
     }
@@ -59,17 +63,17 @@ module.exports = app => {
             let path = category.name
             let parent = getParent(categories, category.parentId)
 
-            while(parent) {
+            while (parent) {
                 path = `${parent.name} > ${path}`
                 parent = getParent(categories, parent.parentId)
             }
 
-            return {...category, path }
+            return { ...category, path }
         })
 
-        categoriesWithPath.sort((a,b) => {
-            if(a.path < b.path) return -1
-            if(a.path > b.path) return 1
+        categoriesWithPath.sort((a, b) => {
+            if (a.path < b.path) return -1
+            if (a.path > b.path) return 1
             return 0
         })
 
@@ -82,9 +86,9 @@ module.exports = app => {
             .catch(err => res.status(500).send(err))
     }
 
-    const getById = (req,res) => {
+    const getById = (req, res) => {
         app.db('categories')
-            .where({id: req.params.id})
+            .where({ id: req.params.id })
             .first()
             .then(category => res.json(category))
             .catch(err => res.status(500).send(err))
@@ -92,7 +96,7 @@ module.exports = app => {
 
 
     const toTree = (categories, tree) => {
-        if(!tree) tree = categories.filter(c => !c.parentId)
+        if (!tree) tree = categories.filter(c => !c.parentId)
 
         tree = tree.map(parentNode => {
             const isChild = node => node.parentId == parentNode.id
@@ -109,5 +113,5 @@ module.exports = app => {
             .catch(err => res.status(500).send(err))
     }
 
-    return { save, remove, get, getById, getTree}
+    return { save, remove, get, getById, getTree }
 }
