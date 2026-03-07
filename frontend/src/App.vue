@@ -6,7 +6,7 @@
       :hideUserDropdown="!user"
     />
     <Menu v-if="user" />
-	<Loading v-if="validatingToken"/>
+    <Loading v-if="validatingToken" />
     <Content v-else />
     <Footer />
   </div>
@@ -49,6 +49,9 @@ export default {
 
       if (res.data) {
         this.$store.commit("setUser", userData);
+        if (this.$mq == "xs" || this.$mq === "sm") {
+          this.$store.commit("toggleMenu", false);
+        }
       } else {
         localStorage.removeItem(userKey);
         this.$router.push({ name: "auth" });
@@ -58,8 +61,8 @@ export default {
     },
   },
   created() {
-	this.validateToken()
-  }
+    this.validateToken();
+  },
 };
 </script>
 

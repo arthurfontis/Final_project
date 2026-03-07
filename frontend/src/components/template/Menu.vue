@@ -45,14 +45,18 @@ export default {
     },
     onNodeSelect(node) {
       this.$router.push({
-        name: 'articlesByCategory',
-        params: { id: node.id}
-      })
-    }
+        name: "articlesByCategory",
+        params: { id: node.id },
+      });
+
+      if (this.$mq == "xs" || this.$mq === "sm") {
+        this.$store.commit("toggleMenu", false);
+      }
+    },
   },
   mounted() {
-    this.$refs.tree.$on('node:selected', this.onNodeSelect)
-  }
+    this.$refs.tree.$on("node:selected", this.onNodeSelect);
+  },
 };
 </script>
 
@@ -87,16 +91,16 @@ export default {
   align-items: center;
   margin: 20px;
   padding-bottom: 8px;
-  border-bottom: 1px solid #AAA;
+  border-bottom: 1px solid #aaa;
 }
 
 .menu .menu-filter i {
-  color: #AAA;
+  color: #aaa;
   margin-right: 10px;
 }
 
 .menu input {
-  color: #CCC;
+  color: #ccc;
   font-size: 1.3rem;
   border: 0;
   outline: 0;
@@ -105,7 +109,7 @@ export default {
 }
 
 .tree-filter-empty {
-  color: #CCC;
+  color: #ccc;
   margin-left: 20px;
   font-size: 1.3rem;
 }
